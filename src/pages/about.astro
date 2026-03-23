@@ -1,0 +1,143 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="About | Kog Hill Winery">
+  <main class="wrap">
+
+    <section class="hero">
+      <h1>About Kog Hill Winery</h1>
+      <p class="lead">
+        Built with intention. Refined with discipline. Driven by distinctive wine.
+      </p>
+    </section>
+
+    <section class="content">
+      <p>
+        Kog Hill Winery began in 2002, when three friends started making wine in a garage.
+        What began as a hobby became a licensed winery — built steadily and without shortcuts.
+      </p>
+
+      <p>
+        In 2022, Julie and Bob were preparing to open their own winery from scratch.
+        The vision was clear: a small, urban-style winery focused on distinctive, small-batch wines.
+        Then Kog Hill became available for sale.
+      </p>
+
+      <p>
+        Buying an established winery was not the original plan, but it was the smarter one.
+        It offered a faster and more practical path forward. Instead of starting at zero,
+        they inherited a foundation worth building on.
+      </p>
+
+      <p>
+        They kept what worked. Wines customers already loved remained in the lineup.
+        The foundation built by the original owners mattered. At the same time,
+        operations were modernized, systems were upgraded, and the philosophy sharpened.
+      </p>
+
+      <p>
+        As a small producer, Kog Hill does not compete with national brands on scale or price.
+        That is not the goal. The focus is on unique wines you do not typically find elsewhere —
+        small runs, distinctive blends, and products larger producers would never attempt.
+      </p>
+
+      <p>
+        In 2025, another strategic decision was made. The tasting room, though meaningful,
+        no longer made financial sense. It was small and could not generate the volume required
+        to support fixed overhead. The location sat on a busy road, but most drivers were
+        headed somewhere else.
+      </p>
+
+      <p>
+        Closing the tasting room was not emotional. It was disciplined.
+        Emotion does not pay bills. At a time when many wineries and breweries are
+        shutting down entirely, Kog Hill chose a different path.
+      </p>
+
+      <p>
+        The winery went lean.
+      </p>
+
+      <p>
+        Overhead was reduced. Focus sharpened. Today, Kog Hill pours at farmers markets,
+        festivals, expos, and special events throughout Pennsylvania.
+        Wine is available online and through select wholesale partners.
+      </p>
+
+      <p>
+        What comes next will be chosen, not stumbled into. A new home may come — the right space,
+        at the right time, for the right reasons. Until then, Kog Hill continues forward
+        with clarity and confidence.
+      </p>
+
+      <p class="closing">
+        The brand is not shrinking. It is strengthening.
+        Kog Hill Winery is still here — just built smarter.
+      </p>
+    </section>
+
+    <section class="aboutCta cta">
+      <a class="button" href="/events">Find Us This Month</a>
+      <a
+        class="button button-outline"
+        href="https://kog-hill-winery.square.site/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Shop Online
+      </a>
+    </section>
+
+  </main>
+
+  <style>
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 16px 64px;
+    }
+
+    .hero {
+      margin-bottom: 32px;
+      text-align: left;
+      padding: 0;
+    }
+
+    h1 {
+      font-size: 42px;
+      line-height: 1.1;
+      margin: 0 0 12px;
+    }
+
+    .lead {
+      font-size: 20px;
+      opacity: 0.85;
+      margin: 0;
+      max-width: 65ch;
+    }
+
+    .content p {
+      font-size: 18px;
+      line-height: 1.7;
+      margin: 0 0 18px;
+    }
+
+    .closing {
+      font-weight: 700;
+      margin-top: 28px;
+    }
+
+    .aboutCta {
+      margin-top: 40px;
+      justify-content: flex-start;
+    }
+
+    @media (max-width: 720px) {
+      h1 { font-size: 32px; }
+      .lead { font-size: 18px; }
+      .content p { font-size: 16px; }
+      .aboutCta { justify-content: center; }
+    }
+  </style>
+</BaseLayout>

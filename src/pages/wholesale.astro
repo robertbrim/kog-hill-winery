@@ -1,0 +1,311 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Wholesale | Kog Hill Winery"
+  description="Wholesale inquiries for shops, restaurants, and venues interested in carrying Kog Hill Winery."
+>
+  <div class="wholesale-page">
+
+    <div class="wholesale-header">
+      <h1>Wholesale Inquiries</h1>
+      <p class="intro">
+        Interested in carrying Kog Hill Winery at your shop, restaurant, or venue?
+        Fill out the form below and we'll follow up with availability and pricing.
+      </p>
+    </div>
+
+    <div class="form-wrapper card">
+      <form id="wholesale-form">
+        <div class="form-row two-col">
+          <div class="form-group">
+            <label for="your-name">Your Name</label>
+            <input
+              type="text"
+              id="your-name"
+              name="entry.2024561198"
+              placeholder=""
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="business-name">Business Name</label>
+            <input
+              type="text"
+              id="business-name"
+              name="entry.849058770"
+              placeholder=""
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-row two-col">
+          <div class="form-group">
+            <label for="business-type">Type of Business</label>
+            <select id="business-type" name="entry.607746218" required>
+              <option value="" disabled selected>Select a category</option>
+              <option value="Restaurant / Bar">Restaurant / Bar</option>
+              <option value="Wine Shop / Bottle Shop">Wine Shop / Bottle Shop</option>
+              <option value="Grocery / Specialty Food Store">Grocery / Specialty Food Store</option>
+              <option value="Hotel / Inn / B&B">Hotel / Inn / B&B</option>
+              <option value="Event Venue">Event Venue</option>
+              <option value="Corporate / Office">Corporate / Office</option>
+              <option value="Gift Shop">Gift Shop</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="business-location">Business Location</label>
+            <input
+              type="text"
+              id="business-location"
+              name="entry.1368710049"
+              placeholder="City, State"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-row two-col">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="entry.847114958"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input
+              type="tel"
+              id="phone"
+              name="entry.1701991657"
+              placeholder="(555) 000-0000"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>How did you hear about us?</label>
+          <div class="radio-group">
+            <label class="radio-label"><input type="radio" name="entry.1404221030" value="Farmers Market" /> Farmers Market</label>
+            <label class="radio-label"><input type="radio" name="entry.1404221030" value="Festival or Event" /> Festival or Event</label>
+            <label class="radio-label"><input type="radio" name="entry.1404221030" value="Word of Mouth" /> Word of Mouth</label>
+            <label class="radio-label"><input type="radio" name="entry.1404221030" value="Social Media" /> Social Media</label>
+            <label class="radio-label"><input type="radio" name="entry.1404221030" value="Google Search" /> Google Search</label>
+            <label class="radio-label"><input type="radio" name="entry.1404221030" value="Existing Customer" /> Existing Customer</label>
+            <label class="radio-label"><input type="radio" name="entry.1404221030" value="Other" /> Other</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="message">Tell us about your business and what you're looking for</label>
+          <textarea
+            id="message"
+            name="entry.1975367013"
+            rows="5"
+            placeholder="Share anything that would help us understand your needs — expected volume, preferred varieties, timeline, etc."
+          ></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="button submit-btn">Send Inquiry</button>
+        </div>
+      </form>
+
+
+    </div>
+
+  </div>
+
+
+
+</BaseLayout>
+
+<style>
+  .wholesale-page {
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  .wholesale-header {
+    margin-bottom: 36px;
+  }
+
+  .wholesale-header h1 {
+    font-size: 38px;
+    color: var(--wine);
+    margin: 0 0 12px 0;
+  }
+
+  .intro {
+    font-size: 17px;
+    color: #555;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .form-wrapper {
+    padding: 36px 40px;
+  }
+
+  @media (max-width: 600px) {
+    .form-wrapper {
+      padding: 24px 20px;
+    }
+  }
+
+  .form-row {
+    display: flex;
+    gap: 20px;
+  }
+
+  .form-row.two-col .form-group {
+    flex: 1;
+  }
+
+  @media (max-width: 600px) {
+    .form-row.two-col {
+      flex-direction: column;
+      gap: 0;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 22px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--wine);
+    margin-bottom: 6px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  select,
+  textarea {
+    font-family: Georgia, serif;
+    font-size: 15px;
+    padding: 10px 14px;
+    border: 1.5px solid #d4c5b0;
+    border-radius: 6px;
+    background: #faf9f7;
+    color: var(--text);
+    transition: border-color 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--wine);
+    background: white;
+  }
+
+  select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234b1e1e' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.5;
+  }
+
+  /* Radio group */
+  .radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    margin-top: 4px;
+  }
+
+  .radio-label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 15px;
+    font-weight: normal;
+    color: var(--text);
+    text-transform: none;
+    letter-spacing: 0;
+    cursor: pointer;
+  }
+
+  .radio-label input[type="radio"] {
+    accent-color: var(--wine);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+
+  .form-actions {
+    margin-top: 8px;
+  }
+
+  .submit-btn {
+    cursor: pointer;
+    border: none;
+    font-family: Georgia, serif;
+    font-size: 16px;
+    padding: 14px 36px;
+    letter-spacing: 0.02em;
+  }
+
+  .submit-btn:hover {
+    background: var(--wine-light);
+  }
+
+
+</style>
+
+<script>
+  document.getElementById('wholesale-form').addEventListener('submit', async function(event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const formData = new FormData(form);
+
+    const params = new URLSearchParams();
+    for (const [key, value] of formData.entries()) {
+      params.append(key, value);
+    }
+
+    const FORM_URL = 'https://docs.google.com/forms/u/0/d/e/1FAIpQLSd8vmwt5_hKNSYcvPlrBkwiS2UWjIf0sm5Gh2-G_zPLN8eezA/formResponse';
+
+    try {
+      await fetch(FORM_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString()
+      });
+    } catch (e) {
+      // no-cors will always throw but data still submits
+    }
+
+    window.location.href = '/thank-you';
+  });
+</script>

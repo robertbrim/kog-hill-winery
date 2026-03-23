@@ -1,0 +1,248 @@
+---
+const { title = "Kog Hill Winery", description = "" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+  </head>
+
+  <body>
+    <header class="site-header">
+      <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/events">Events</a>
+        <a href="https://kog-hill-winery.square.site/" target="_blank" rel="noopener noreferrer">Shop Online</a>
+        <a href="/wholesale">Wholesale</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-subscribe">
+        <p class="subscribe-heading">Stay in the loop</p>
+        <p class="subscribe-subtext">Events, new releases, and seasonal updates.</p>
+        <form
+          action="https://koghillwinery.us10.list-manage.com/subscribe/post?u=f58c85cd14412571f6159dba8&amp;id=79529e20e0&amp;f_id=00be23e2f0"
+          method="post"
+          target="_blank"
+        >
+          <div class="subscribe-row">
+            <input
+              type="email"
+              name="EMAIL"
+              placeholder="Your email address"
+              required
+              class="subscribe-input"
+            />
+            <button type="submit" class="button subscribe-btn">Subscribe</button>
+          </div>
+          <!-- Mailchimp honeypot — do not remove -->
+          <div style="position: absolute; left: -5000px;" aria-hidden="true">
+            <input type="text" name="b_f58c85cd14412571f6159dba8_79529e20e0" tabindex="-1" value="" />
+          </div>
+        </form>
+      </div>
+
+      <div class="footer-bottom">
+        © {new Date().getFullYear()} Kog Hill Winery
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --wine: #4b1e1e;
+    --wine-light: #7a2d2d;
+    --cream: #f4f1ed;
+    --text: #222;
+  }
+
+  body {
+    margin: 0;
+    font-family: Georgia, serif;
+    background: var(--cream);
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .site-header {
+    background: var(--wine);
+    padding: 16px 24px;
+  }
+
+  .nav {
+    display: flex;
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .nav a:hover {
+    opacity: 0.8;
+  }
+
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+
+  /* Footer */
+  .site-footer {
+    background: var(--wine);
+    color: white;
+    margin-top: 60px;
+  }
+
+  .footer-subscribe {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 24px 32px;
+    text-align: center;
+  }
+
+  .subscribe-heading {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 0 6px 0;
+    color: white;
+  }
+
+  .subscribe-subtext {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0 0 20px 0;
+  }
+
+  .subscribe-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .subscribe-input {
+    font-family: Georgia, serif;
+    font-size: 15px;
+    padding: 10px 16px;
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    width: 280px;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .subscribe-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .subscribe-input:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .subscribe-btn {
+    cursor: pointer;
+    border: none;
+    font-family: Georgia, serif;
+    font-size: 15px;
+    background: white;
+    color: var(--wine);
+    padding: 10px 24px;
+  }
+
+  .subscribe-btn:hover {
+    background: var(--cream);
+  }
+
+  .footer-bottom {
+    text-align: center;
+    padding: 20px 24px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Hero and buttons */
+  .hero {
+    text-align: center;
+    padding: 80px 20px;
+  }
+
+  .hero h1 {
+    font-size: 48px;
+    margin: 0 0 16px 0;
+  }
+
+  .tagline {
+    font-size: 20px;
+    margin: 0 0 32px 0;
+  }
+
+  .cta {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .button {
+    display: inline-block;
+    padding: 14px 24px;
+    background: var(--wine);
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+  }
+
+  .button:hover {
+    background: var(--wine-light);
+  }
+
+  .button-outline {
+    background: transparent;
+    border: 2px solid var(--wine);
+    color: var(--wine);
+  }
+
+  .button-outline:hover {
+    background: var(--wine);
+    color: white;
+  }
+
+  .card {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    padding: 16px;
+  }
+
+  @media (max-width: 720px) {
+    .card {
+      border-radius: 14px;
+      padding: 12px;
+    }
+  }
+</style>

@@ -1,0 +1,131 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Calendar from "../components/calendar.jsx";
+import { getCalendarEvents } from "../lib/calendar.js";
+
+const events = await getCalendarEvents();
+
+const now = new Date();
+
+const upcomingEvents = events
+  .filter((e) => new Date(e.start) >= now)
+  .slice()
+  .sort((a, b) => new Date(a.start) - new Date(b.start))
+  .slice(0, 3);
+
+function formatDateTime(d) {
+  return new Date(d).toLocaleString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
+function firstLineInfo(text) {
+  if (!text) return { line: "", url: "" };
+
+  const stripped = String(text).replace(/<[^>]*>/g, "");
+  const line = stripped.split("\n")[0].trim();
+
+  const match = line.match(/https?:\/\/\S+/i);
+  const url = match ? match[0].replace(/[),.;]+$/g, "") : "";
+
+  return { line, url };
+}
+---
+
+<BaseLayout title="Events | Kog Hill Winery">
+  <main>
+    <header class="pagehead">
+      <h1>Find Us This Month</h1>
+      <p>
+        We are pouring at farmers markets, festivals, and special events across Pennsylvania.
+        There is no substitute for tasting wine in person. Here is where you can find Kog Hill next.
+      </p>
+    </header>
+
+    {upcomingEvents.length > 0 ? (
+      <section class="next">
+        <h2>Next 3 Events</h2>
+        <div class="nextList">
+          {upcomingEvents.map((e) => (
+            <article class="nextItem">
+              <div class="nextTitle">{e.title}</div>
+              <div class="nextMeta">{formatDateTime(e.start)}</div>
+              {e.location ? <div class="nextMeta">{e.location}</div> : null}
+
+              {e.description ? (
+                (() => {
+                  const info = firstLineInfo(e.description);
+                  return info.url ? (
+                    <div class="nextDesc">
+                      <a class="nextLink" href={info.url} target="_blank" rel="noopener noreferrer">
+                        Event link
+                      </a>
+                    </div>
+                  ) : (
+                    <div class="nextDesc">{info.line}</div>
+                  );
+                })()
+              ) : null}
+            </article>
+          ))}
+        </div>
+      </section>
+    ) : null}
+
+    <section class="card">
+      <Calendar client:load events={events} />
+    </section>
+  </main>
+
+  <style>
+    .pagehead { margin: 10px 0 18px; }
+    .pagehead h1 { font-size: 40px; line-height: 1.1; margin: 0 0 10px; }
+    .pagehead p { margin: 0; font-size: 18px; max-width: 70ch; }
+
+    .next { margin: 18px 0 16px; }
+    .next h2 { font-size: 20px; margin: 0 0 10px; }
+    .nextList { display: grid; gap: 10px; }
+
+    .nextItem {
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 16px;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .nextTitle { font-weight: 800; margin: 0 0 6px; color: var(--text); }
+    .nextMeta { font-size: 14px; opacity: 0.75; margin: 0 0 4px; }
+
+    .nextDesc {
+      font-size: 14px;
+      margin-top: 6px;
+      opacity: 0.85;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nextLink {
+      color: var(--wine);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      opacity: 0.95;
+    }
+    .nextLink:hover {
+      opacity: 1;
+    }
+
+    @media (max-width: 720px) {
+      .pagehead h1 { font-size: 32px; }
+      .pagehead p { font-size: 16px; }
+      .card { border-radius: 14px; padding: 12px; }
+      .nextItem { border-radius: 14px; }
+      .nextDesc { white-space: normal; }
+    }
+  </style>
+</BaseLayout>

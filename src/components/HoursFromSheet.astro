@@ -1,0 +1,49 @@
+---
+const { sheetCommaSeparatedValuesAddress } = Astro.props;
+---
+
+<div class="hours-block" data-sheet={sheetCommaSeparatedValuesAddress}>
+  <p>Loading hours…</p>
+</div>
+
+<script>
+  const root = document.currentScript.previousElementSibling;
+  const sheetAddress = root.dataset.sheet;
+
+  function parseCommaSeparated(text) {
+    const lines = text.split(/\r?\n/).filter(Boolean);
+    if (lines.length < 2) return [];
+
+    const rows = [];
+    for (let i = 1; i < lines.length; i++) {
+      const parts = lines[i].split(",");
+      const day = (parts[0] || "").trim();
+      const hours = (parts.slice(1).join(",") || "").trim();
+      if (day && hours) rows.push({ day, hours });
+    }
+    return rows;
+  }
+
+  async function load() {
+    try {
+      const response = await fetch(sheetAddress, { cache: "no-store" });
+      if (!response.ok) throw new Error("Request failed");
+
+      const text = await response.text();
+      const rows = parseCommaSeparated(text);
+
+      if (!rows.length) {
+        root.innerHTML = "<p>Hours are not available right now.</p>";
+        return;
+      }
+
+      root.innerHTML = rows
+        .map((r) => `<p><strong>${r.day}:</strong> ${r.hours}</p>`)
+        .join("");
+    } catch (e) {
+      root.innerHTML = "<p>Hours are not available right now.</p>";
+    }
+  }
+
+  load();
+</script>

@@ -1,0 +1,97 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const formAction = "https://formspree.io/f/mzdaqzvk";
+---
+
+<BaseLayout title="Contact | Kog Hill Winery">
+  <main>
+    <header class="pagehead">
+      <h1>Contact</h1>
+      <p>
+        Send us a message and we will get back to you. We are currently event-focused and do not have a public tasting room.
+      </p>
+    </header>
+
+    <section class="card">
+      <form action={formAction} method="POST" class="form">
+        <div class="row">
+          <label>
+            Name
+            <input name="name" type="text" autocomplete="name" required />
+          </label>
+
+          <label>
+            Phone (optional)
+            <input name="phone" type="tel" autocomplete="tel" />
+          </label>
+        </div>
+
+        <label>
+          Your email (so we can reply)
+          <input name="reply_to" type="email" autocomplete="email" required />
+        </label>
+
+        <label class="hp" aria-hidden="true">
+          Leave this field blank
+          <input name="company" type="text" tabindex="-1" autocomplete="off" />
+        </label>
+
+        <label>
+          Message
+          <textarea name="message" rows="6" required></textarea>
+        </label>
+
+        <input type="hidden" name="source" value="koghillwinery.com contact form" />
+        <input type="hidden" name="_next" value="https://kogghillwinery.comu" />
+        
+        <button class="button" type="submit">Send message</button>
+
+        <p class="note">
+          If you do not hear back within 48 hours, please message us on social media at an upcoming event.
+        </p>
+      </form>
+    </section>
+
+    <section class="card location">
+      <h2>Where to find us</h2>
+      <p>
+        We pour at farmers markets, festivals, expos, and special events across Pennsylvania.
+        The best place to see where we will be next is our Events page.
+      </p>
+      <a class="button button-outline" href="/events">View events</a>
+    </section>
+  </main>
+
+  <style>
+    .pagehead { margin: 10px 0 18px; }
+    .pagehead h1 { margin: 0 0 10px; }
+    .pagehead p { margin: 0; max-width: 70ch; opacity: 0.85; }
+
+    .form { display: grid; gap: 14px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    label { display: grid; gap: 6px; font-weight: 600; }
+    input, textarea {
+      font: inherit;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(0,0,0,0.18);
+      background: rgba(255,255,255,0.95);
+    }
+
+    textarea { resize: vertical; }
+
+    .note { margin: 8px 0 0; font-size: 14px; opacity: 0.75; }
+
+    .hp { display: none; }
+
+    .location { margin-top: 18px; }
+    .location h2 { margin: 0 0 8px; }
+    .location p { margin: 0 0 12px; opacity: 0.85; }
+
+    @media (max-width: 720px) {
+      .row { grid-template-columns: 1fr; }
+    }
+  </style>
+</BaseLayout>

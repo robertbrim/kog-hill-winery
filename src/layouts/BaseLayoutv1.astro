@@ -1,0 +1,147 @@
+---
+const { title = "Kog Hill Winery", description = "" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+  </head>
+
+  <body>
+    <header class="site-header">
+      <nav class="nav">
+  <a href="/">Home</a>
+  <a href="/events">Events</a>
+  <a href="https://kog-hill-winery.square.site/" target="_blank" rel="noopener noreferrer">Shop Online</a>
+  <a href="/wholesale">Wholesale</a>
+  <a href="/about">About</a>
+  <a href="/contact">Contact</a>
+</nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      © {new Date().getFullYear()} Kog Hill Winery
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --wine: #4b1e1e;
+    --wine-light: #7a2d2d;
+    --cream: #f4f1ed;
+    --text: #222;
+  }
+
+  body {
+    margin: 0;
+    font-family: Georgia, serif;
+    background: var(--cream);
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .site-header {
+    background: var(--wine);
+    padding: 16px 24px;
+  }
+
+  .nav {
+    display: flex;
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .nav a:hover {
+    opacity: 0.8;
+  }
+
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+
+  .site-footer {
+    text-align: center;
+    padding: 40px 0;
+    font-size: 14px;
+    color: #666;
+  }
+
+  /* Hero and buttons (these are in the slotted page content) */
+  .hero {
+    text-align: center;
+    padding: 80px 20px;
+  }
+
+  .hero h1 {
+    font-size: 48px;
+    margin: 0 0 16px 0;
+  }
+
+  .tagline {
+    font-size: 20px;
+    margin: 0 0 32px 0;
+  }
+
+  .cta {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .button {
+    display: inline-block;
+    padding: 14px 24px;
+    background: var(--wine);
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+  }
+
+  .button:hover {
+    background: var(--wine-light);
+  }
+
+  .button-outline {
+    background: transparent;
+    border: 2px solid var(--wine);
+    color: var(--wine);
+  }
+
+  .button-outline:hover {
+    background: var(--wine);
+    color: white;
+  }
+  .card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  padding: 16px;
+}
+@media (max-width: 720px) {
+  .card {
+    border-radius: 14px;
+    padding: 12px;
+  }
+}
+</style>

@@ -1,0 +1,344 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCalendarEvents } from "../lib/calendar.js";
+
+function toDate(value) {
+  if (!value) return null;
+  const d = new Date(value);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
+function safeText(value) {
+  return typeof value === "string" ? value : "";
+}
+
+function formatEvent(e) {
+  const title = safeText(e.title ?? e.summary ?? e.name ?? "Event");
+  const location = safeText(e.location ?? e.where ?? "");
+
+  const start =
+    toDate(e.start ?? e.startDate ?? e.startTime ?? e.dtstart ?? e.begin) ?? null;
+  const end =
+    toDate(e.end ?? e.endDate ?? e.endTime ?? e.dtend ?? e.finish) ?? null;
+
+  const timeZone = "America/New_York";
+
+  const monthShort = start
+    ? new Intl.DateTimeFormat("en-US", { month: "short", timeZone }).format(start)
+    : "";
+  const day = start
+    ? new Intl.DateTimeFormat("en-US", { day: "2-digit", timeZone }).format(start)
+    : "";
+
+  let timeRange = "";
+  if (start) {
+    const startTime = new Intl.DateTimeFormat("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      timeZone,
+    }).format(start);
+
+    if (end) {
+      const endTime = new Intl.DateTimeFormat("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        timeZone,
+      }).format(end);
+
+      timeRange = `${startTime} to ${endTime}`;
+    } else {
+      timeRange = startTime;
+    }
+  }
+
+  return {
+    title,
+    location: location || null,
+    monthShort,
+    day,
+    timeRange: timeRange || "",
+    start,
+  };
+}
+
+function futureOnly(events) {
+  const now = new Date();
+  return events.filter((e) => e.start && e.start.getTime() >= now.getTime());
+}
+
+const raw = await getCalendarEvents();
+const rawArray = Array.isArray(raw) ? raw : (raw?.events ?? []);
+const normalized = rawArray.map(formatEvent);
+
+const upcoming = futureOnly(normalized).sort((a, b) => a.start.getTime() - b.start.getTime());
+const next3 = upcoming.slice(0, 3);
+const hasEvents = upcoming.length > 0;
+
+const squareUrl = "https://kog-hill-winery.square.site/";
+---
+
+<BaseLayout title="Kog Hill Winery">
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="heroGrid">
+        <div>
+          <p class="eyebrow">Kog Hill Winery</p>
+          <h1>We pour at events. You order online.</h1>
+          <p class="lead">
+            Find us at festivals, markets, and community events. Order anytime through our online store.
+          </p>
+
+          <div class="actions">
+            <a class="button" href="/events">Find Us This Month</a>
+            <a class="button button-outline" href={squareUrl} target="_blank" rel="noopener noreferrer">
+              Shop Online
+            </a>
+          </div>
+        </div>
+
+        <aside class="card nextCard" aria-label="Next events">
+          <h2 class="h2">Next events</h2>
+
+          {hasEvents ? (
+            <ol class="eventList">
+              {next3.map((e) => (
+                <li class="eventRow">
+                  <div class="eventDate">
+                    <span class="md">{e.monthShort}</span>
+                    <span class="dy">{e.day}</span>
+                  </div>
+
+                  <div class="eventInfo">
+                    <div class="eventName">{e.title}</div>
+                    <div class="eventMeta">
+                      {e.timeRange ? <span>{e.timeRange}</span> : null}
+                      {e.location ? <span class="dot">•</span> : null}
+                      {e.location ? <span>{e.location}</span> : null}
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p class="muted">No upcoming events are listed right now. Check back soon.</p>
+          )}
+
+          <div class="nextActions">
+            <a class="button button-outline" href="/events">See all events</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- WHAT NOW -->
+    <section class="section">
+      <div class="threeCol">
+        <div class="card">
+          <h2 class="h2">Events</h2>
+          <p class="p">
+            Our calendar is always current. Tap an event to see full details.
+          </p>
+          <a class="button" href="/events">View events</a>
+        </div>
+
+        <div class="card">
+          <h2 class="h2">Shop online</h2>
+          <p class="p">
+            Order through our Square store for pickup or shipping.
+          </p>
+          <a class="button" href={squareUrl} target="_blank" rel="noopener noreferrer">
+            Shop Online
+          </a>
+        </div>
+
+        <div class="card">
+          <h2 class="h2">Wholesale</h2>
+          <p class="p">
+            Interested in carrying Kog Hill at your shop or venue? We offer wholesale availability by request.
+          </p>
+          <a class="button" href="/wholesale">Wholesale details</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT TEASER -->
+    <section class="section alt">
+      <div class="twoCol">
+        <div>
+          <h2 class="h2">About Kog Hill</h2>
+          <p class="p">
+            Kog Hill began in 2002 and was purchased in 2022 by Julie and Bob. We kept what worked, modernized the rest,
+            and focused on unique wines that small producers do best.
+          </p>
+          <p class="p">
+            Closing the tasting room was strategic. Today we pour at events and keep ordering simple online while we
+            look for the right future home.
+          </p>
+
+          <div class="actions">
+            <a class="button" href="/about">Read more</a>
+            <a class="button button-outline" href="/events">Find us</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="stat">
+            <strong>Where to find us</strong>
+            <div class="muted">Festivals, markets, and community events</div>
+          </div>
+          <div class="stat">
+            <strong>How to order</strong>
+            <div class="muted">Online ordering for pickup or shipping</div>
+          </div>
+          <div class="stat">
+            <strong>What we make</strong>
+            <div class="muted">Unique wines you cannot typically find elsewhere</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <style>
+    /* Page layout only. Colors and buttons come from BaseLayout. */
+
+    .hero { padding: 18px 0 10px; }
+
+    .heroGrid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.9fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .eyebrow {
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 12px;
+      opacity: 0.75;
+      margin: 0 0 10px;
+    }
+
+    h1 {
+      font-size: 46px;
+      line-height: 1.05;
+      margin: 0 0 10px;
+    }
+
+    .lead {
+      font-size: 18px;
+      opacity: 0.85;
+      max-width: 60ch;
+      margin: 0 0 18px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin: 12px 0 0;
+    }
+
+    .muted { opacity: 0.75; }
+
+    .h2 { margin: 0 0 10px; font-size: 20px; }
+    .p { margin: 0 0 12px; font-size: 16px; max-width: 70ch; }
+
+    .nextCard { padding: 16px; }
+
+    .eventList { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+    .eventRow {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(0,0,0,0.08);
+      background: rgba(255,255,255,0.92);
+    }
+
+    .eventDate {
+      text-align: center;
+      border-radius: 12px;
+      background: rgba(0,0,0,0.04);
+      padding: 8px 6px;
+    }
+
+    .md {
+      display: block;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      opacity: 0.85;
+    }
+
+    .dy { display: block; font-size: 18px; font-weight: 800; line-height: 1.1; }
+
+    .eventName { font-weight: 800; line-height: 1.2; }
+    .eventMeta {
+      opacity: 0.78;
+      font-size: 13px;
+      margin-top: 3px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .dot { opacity: 0.5; }
+
+    .nextActions { margin-top: 12px; }
+
+    .section { padding: 22px 0; }
+    .section.alt { background: rgba(0,0,0,0.02); }
+
+    .threeCol {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .twoCol {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .stat { padding: 10px 0; border-top: 1px solid rgba(0,0,0,0.06); }
+    .stat:first-child { border-top: 0; padding-top: 0; }
+
+    @media (max-width: 900px) {
+      .heroGrid { grid-template-columns: 1fr; }
+      .threeCol { grid-template-columns: 1fr; }
+      .twoCol { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 520px) {
+      h1 { font-size: 36px; }
+      .lead { font-size: 16px; }
+    }
+    /* Make the 3 cards match height and align buttons */
+.threeCol {
+  align-items: stretch;
+}
+
+.threeCol > .card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.threeCol > .card .p {
+  margin-bottom: 14px;
+}
+
+.threeCol > .card a.button {
+  margin-top: auto;
+  align-self: flex-start;
+}
+  </style>
+</BaseLayout>
