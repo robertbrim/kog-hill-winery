@@ -1,5 +1,12 @@
 ---
-const { title = "Kog Hill Winery", description = "" } = Astro.props;
+const {
+  title = "Kog Hill Winery",
+  description = "Kog Hill Winery crafts small-batch wines poured at local events across Pennsylvania. Order online and enjoy handcrafted wine delivered to your door.",
+  ogImage = "https://koghillwinery.com/og-image.jpg",
+  canonicalUrl = Astro.url.href,
+} = Astro.props;
+
+const siteUrl = "https://koghillwinery.com";
 ---
 
 <!doctype html>
@@ -8,7 +15,42 @@ const { title = "Kog Hill Winery", description = "" } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
-    {description && <meta name="description" content={description} />}
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="Kog Hill Winery" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- Structured Data: Local Business -->
+    <script type="application/ld+json">
+      {JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": ["Winery", "LocalBusiness"],
+        "name": "Kog Hill Winery",
+        "url": siteUrl,
+        "description": "Small-batch winery pouring at events across Pennsylvania. Order online.",
+        "address": {
+          "@type": "PostalAddress",
+          "addressRegion": "PA",
+          "addressCountry": "US"
+        },
+        "sameAs": [
+          "https://kog-hill-winery.square.site/"
+        ]
+      })}
+    </script>
   </head>
 
   <body>
