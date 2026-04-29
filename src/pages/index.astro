@@ -57,22 +57,13 @@ function formatEvent(e) {
     monthShort,
     day,
     timeRange: timeRange || "",
-    start,
+    start: start ? start.toISOString() : null,
   };
-}
-
-function futureOnly(events) {
-  const now = new Date();
-  return events.filter((e) => e.start && e.start.getTime() >= now.getTime());
 }
 
 const raw = await getCalendarEvents();
 const rawArray = Array.isArray(raw) ? raw : (raw?.events ?? []);
-const normalized = rawArray.map(formatEvent);
-
-const upcoming = futureOnly(normalized).sort((a, b) => a.start.getTime() - b.start.getTime());
-const next3 = upcoming.slice(0, 3);
-const hasEvents = upcoming.length > 0;
+const allEvents = rawArray.map(formatEvent);
 
 const squareUrl = "https://kog-hill-winery.square.site/";
 ---
@@ -100,29 +91,11 @@ const squareUrl = "https://kog-hill-winery.square.site/";
         <aside class="card nextCard" aria-label="Next events">
           <h2 class="h2">Next events</h2>
 
-          {hasEvents ? (
-            <ol class="eventList">
-              {next3.map((e) => (
-                <li class="eventRow">
-                  <div class="eventDate">
-                    <span class="md">{e.monthShort}</span>
-                    <span class="dy">{e.day}</span>
-                  </div>
-
-                  <div class="eventInfo">
-                    <div class="eventName">{e.title}</div>
-                    <div class="eventMeta">
-                      {e.timeRange ? <span>{e.timeRange}</span> : null}
-                      {e.location ? <span class="dot">•</span> : null}
-                      {e.location ? <span>{e.location}</span> : null}
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          ) : (
-            <p class="muted">No upcoming events are listed right now. Check back soon.</p>
-          )}
+          <ol class="eventList" id="home-event-list">
+            <li class="eventRow muted-placeholder">
+              <p class="muted">Loading upcoming events…</p>
+            </li>
+          </ol>
 
           <div class="nextActions">
             <a class="button button-outline" href="/events">See all events</a>
@@ -137,16 +110,14 @@ const squareUrl = "https://kog-hill-winery.square.site/";
         <div class="card">
           <h2 class="h2">Events</h2>
           <p class="p">
-            Our calendar is always current. Tap an event to see full details.
+            Our calendar is <a href="/events">always current</a>. Tap an event to see full details.
           </p>
           <a class="button" href="/events">View events</a>
         </div>
 
         <div class="card">
           <h2 class="h2">Shop online</h2>
-          <p class="p">
-            Order through our Square store for pickup or shipping.
-          </p>
+          <p class="p">Order through our Square store for pickup or shipping.</p>
           <a class="button" href={squareUrl} target="_blank" rel="noopener noreferrer">
             Shop Online
           </a>
@@ -182,23 +153,53 @@ const squareUrl = "https://kog-hill-winery.square.site/";
           </div>
         </div>
 
-        <div class="card">
-          <div class="stat">
-            <strong>Where to find us</strong>
-            <div class="muted">Festivals, markets, and community events</div>
-          </div>
-          <div class="stat">
-            <strong>How to order</strong>
-            <div class="muted">Online ordering for pickup or shipping</div>
-          </div>
-          <div class="stat">
-            <strong>What we make</strong>
-            <div class="muted">Unique wines you cannot typically find elsewhere</div>
-          </div>
+        <div class="card stat">
+          <strong>Where to find us</strong>
+          <div class="muted">Unique wines you cannot typically find elsewhere</div>
         </div>
       </div>
     </section>
   </main>
+
+  <script is:inline define:vars={{ allEvents }}>
+    (function () {
+      const now = new Date();
+
+      const upcoming = allEvents
+        .filter((e) => e.start && new Date(e.start) >= now)
+        .sort((a, b) => new Date(a.start) - new Date(b.start))
+        .slice(0, 3);
+
+      const list = document.getElementById("home-event-list");
+      if (!list) return;
+
+      if (upcoming.length === 0) {
+        list.innerHTML =
+          '<li class="eventRow"><p class="muted">No upcoming events are listed right now. Check back soon.</p></li>';
+        return;
+      }
+
+      list.innerHTML = upcoming
+        .map(
+          (e) => `
+          <li class="eventRow">
+            <div class="eventDate">
+              <span class="md">${e.monthShort}</span>
+              <span class="dy">${e.day}</span>
+            </div>
+            <div class="eventInfo">
+              <div class="eventName">${e.title}</div>
+              <div class="eventMeta">
+                ${e.timeRange ? `<span>${e.timeRange}</span>` : ""}
+                ${e.timeRange && e.location ? `<span class="dot">·</span>` : ""}
+                ${e.location ? `<span>${e.location}</span>` : ""}
+              </div>
+            </div>
+          </li>`
+        )
+        .join("");
+    })();
+  </script>
 
   <style>
     /* Page layout only. Colors and buttons come from BaseLayout. */
@@ -235,110 +236,80 @@ const squareUrl = "https://kog-hill-winery.square.site/";
 
     .actions {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
-      align-items: center;
-      margin: 12px 0 0;
     }
 
-    .muted { opacity: 0.75; }
+    /* Next events card */
+    .nextCard { padding: 18px 20px 14px; }
+    .nextCard .h2 { font-size: 16px; margin: 0 0 14px; text-align: center; }
 
-    .h2 { margin: 0 0 10px; font-size: 20px; }
-    .p { margin: 0 0 12px; font-size: 16px; max-width: 70ch; }
-
-    .nextCard { padding: 16px; }
-
-    .eventList { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
-    .eventRow {
+    .eventList {
+      list-style: none;
+      margin: 0;
+      padding: 0;
       display: grid;
-      grid-template-columns: 64px 1fr;
+      gap: 10px;
+    }
+
+    .eventRow {
+      display: flex;
       gap: 12px;
-      align-items: start;
-      padding: 10px;
-      border-radius: 12px;
-      border: 1px solid rgba(0,0,0,0.08);
-      background: rgba(255,255,255,0.92);
+      align-items: flex-start;
     }
 
     .eventDate {
-      text-align: center;
-      border-radius: 12px;
-      background: rgba(0,0,0,0.04);
-      padding: 8px 6px;
-    }
-
-    .md {
-      display: block;
-      font-size: 12px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      opacity: 0.85;
-    }
-
-    .dy { display: block; font-size: 18px; font-weight: 800; line-height: 1.1; }
-
-    .eventName { font-weight: 800; line-height: 1.2; }
-    .eventMeta {
-      opacity: 0.78;
-      font-size: 13px;
-      margin-top: 3px;
       display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
+      flex-direction: column;
       align-items: center;
+      min-width: 36px;
+      background: var(--wine);
+      color: #fff;
+      border-radius: 8px;
+      padding: 4px 6px;
+      line-height: 1.1;
     }
-    .dot { opacity: 0.5; }
 
-    .nextActions { margin-top: 12px; }
+    .md { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .dy { font-size: 20px; font-weight: 700; }
 
-    .section { padding: 22px 0; }
-    .section.alt { background: rgba(0,0,0,0.02); }
+    .eventInfo { flex: 1; }
+    .eventName { font-weight: 700; font-size: 14px; margin: 0 0 2px; }
+    .eventMeta { font-size: 12px; opacity: 0.7; }
+    .dot { margin: 0 3px; }
+
+    .nextActions { margin-top: 14px; text-align: center; }
+
+    /* Section grid */
+    .section { padding: 18px 0; }
+    .section.alt { background: var(--bg-alt, #f5f0eb); padding: 24px 16px; border-radius: 12px; margin: 8px 0; }
 
     .threeCol {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-      align-items: start;
+      gap: 14px;
     }
 
     .twoCol {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 22px;
-      align-items: start;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 24px;
+      align-items: center;
     }
 
-    .stat { padding: 10px 0; border-top: 1px solid rgba(0,0,0,0.06); }
-    .stat:first-child { border-top: 0; padding-top: 0; }
+    .h2 { font-size: 20px; margin: 0 0 8px; }
+    .p { font-size: 15px; margin: 0 0 14px; opacity: 0.85; max-width: 50ch; }
 
-    @media (max-width: 900px) {
+    .stat { text-align: center; padding: 24px; }
+    .stat strong { font-size: 20px; display: block; margin-bottom: 8px; }
+
+    .muted { opacity: 0.6; font-size: 14px; }
+
+    @media (max-width: 760px) {
       .heroGrid { grid-template-columns: 1fr; }
       .threeCol { grid-template-columns: 1fr; }
       .twoCol { grid-template-columns: 1fr; }
+      h1 { font-size: 34px; }
     }
-
-    @media (max-width: 520px) {
-      h1 { font-size: 36px; }
-      .lead { font-size: 16px; }
-    }
-    /* Make the 3 cards match height and align buttons */
-.threeCol {
-  align-items: stretch;
-}
-
-.threeCol > .card {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.threeCol > .card .p {
-  margin-bottom: 14px;
-}
-
-.threeCol > .card a.button {
-  margin-top: auto;
-  align-self: flex-start;
-}
   </style>
 </BaseLayout>
