@@ -1,0 +1,11 @@
+name: Nightly Netlify Rebuild
+
+on:
+  schedule:
+      - cron: '0 5 * * *'  # 1AM Eastern / midnight Central every night
+      jobs:
+        rebuild:
+            runs-on: ubuntu-latest
+                steps:
+                      - name: Trigger Netlify build
+                              run: curl -X POST -d '{}' https://api.netlify.com/build_hooks/69f2695bdbd177122d411c3e
