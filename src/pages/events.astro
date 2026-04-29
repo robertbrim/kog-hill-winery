@@ -5,25 +5,6 @@ import { getCalendarEvents } from "../lib/calendar.js";
 
 const events = await getCalendarEvents();
 
-const now = new Date();
-
-const upcomingEvents = events
-  .filter((e) => new Date(e.start) >= now)
-  .slice()
-  .sort((a, b) => new Date(a.start) - new Date(b.start))
-  .slice(0, 3);
-
-function formatDateTime(d) {
-  return new Date(d).toLocaleString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-  });
-}
-
 function firstLineInfo(text) {
   if (!text) return { line: "", url: "" };
 
@@ -47,40 +28,96 @@ function firstLineInfo(text) {
       </p>
     </header>
 
-    {upcomingEvents.length > 0 ? (
-      <section class="next">
-        <h2>Next 3 Events</h2>
-        <div class="nextList">
-          {upcomingEvents.map((e) => (
-            <article class="nextItem">
-              <div class="nextTitle">{e.title}</div>
-              <div class="nextMeta">{formatDateTime(e.start)}</div>
-              {e.location ? <div class="nextMeta">{e.location}</div> : null}
-
-              {e.description ? (
-                (() => {
-                  const info = firstLineInfo(e.description);
-                  return info.url ? (
-                    <div class="nextDesc">
-                      <a class="nextLink" href={info.url} target="_blank" rel="noopener noreferrer">
-                        {info.url}
-                      </a>
-                    </div>
-                  ) : (
-                    <div class="nextDesc">{info.line}</div>
-                  );
-                })()
-              ) : null}
-            </article>
-          ))}
-        </div>
-      </section>
-    ) : null}
+    <section class="next" id="next-events-section" style="display:none">
+      <h2>Next 3 Events</h2>
+      <div class="nextList" id="next-events-list"></div>
+    </section>
 
     <section class="card">
       <Calendar1 client:load events={events} />
     </section>
   </main>
+
+  <script is:inline define:vars={{ events }}>
+    (function () {
+      function formatDateTime(d) {
+        return new Date(d).toLocaleString("en-US", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+        });
+      }
+
+      function firstLineInfo(text) {
+        if (!text) return { line: "", url: "" };
+        const stripped = String(text).replace(/<[^>]*>/g, "");
+        const line = stripped.split("\n")[0].trim();
+        const match = line.match(/https?:\/\/\S+/i);
+        const url = match ? match[0].replace(/[),.;]+$/g, "") : "";
+        return { line, url };
+      }
+
+      const now = new Date();
+
+      const upcomingEvents = events
+        .filter((e) => new Date(e.start) >= now)
+        .slice()
+        .sort((a, b) => new Date(a.start) - new Date(b.start))
+        .slice(0, 3);
+
+      const section = document.getElementById("next-events-section");
+      const list = document.getElementById("next-events-list");
+
+      if (upcomingEvents.length > 0 && section && list) {
+        upcomingEvents.forEach((e) => {
+          const article = document.createElement("article");
+          article.className = "nextItem";
+
+          const title = document.createElement("div");
+          title.className = "nextTitle";
+          title.textContent = e.title;
+          article.appendChild(title);
+
+          const meta = document.createElement("div");
+          meta.className = "nextMeta";
+          meta.textContent = formatDateTime(e.start);
+          article.appendChild(meta);
+
+          if (e.location) {
+            const loc = document.createElement("div");
+            loc.className = "nextMeta";
+            loc.textContent = e.location;
+            article.appendChild(loc);
+          }
+
+          if (e.description) {
+            const info = firstLineInfo(e.description);
+            const desc = document.createElement("div");
+            desc.className = "nextDesc";
+            if (info.url) {
+              const a = document.createElement("a");
+              a.className = "nextLink";
+              a.href = info.url;
+              a.target = "_blank";
+              a.rel = "noopener noreferrer";
+              a.textContent = info.url;
+              desc.appendChild(a);
+            } else {
+              desc.textContent = info.line;
+            }
+            article.appendChild(desc);
+          }
+
+          list.appendChild(article);
+        });
+
+        section.style.display = "";
+      }
+    })();
+  </script>
 
   <style>
     .pagehead { margin: 10px 0 18px; }
