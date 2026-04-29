@@ -92,7 +92,7 @@ const squareUrl = "https://kog-hill-winery.square.site/";
           <h2 class="h2">Next events</h2>
 
           <ol class="eventList" id="home-event-list">
-            <li class="eventRow muted-placeholder">
+            <li class="eventRow">
               <p class="muted">Loading upcoming events…</p>
             </li>
           </ol>
@@ -191,7 +191,7 @@ const squareUrl = "https://kog-hill-winery.square.site/";
               <div class="eventName">${e.title}</div>
               <div class="eventMeta">
                 ${e.timeRange ? `<span>${e.timeRange}</span>` : ""}
-                ${e.timeRange && e.location ? `<span class="dot">·</span>` : ""}
+                ${e.timeRange && e.location ? `<span class="dot">\u00b7</span>` : ""}
                 ${e.location ? `<span>${e.location}</span>` : ""}
               </div>
             </div>
@@ -252,32 +252,6 @@ const squareUrl = "https://kog-hill-winery.square.site/";
       gap: 10px;
     }
 
-    .eventRow {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-    }
-
-    .eventDate {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-width: 36px;
-      background: var(--wine);
-      color: #fff;
-      border-radius: 8px;
-      padding: 4px 6px;
-      line-height: 1.1;
-    }
-
-    .md { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
-    .dy { font-size: 20px; font-weight: 700; }
-
-    .eventInfo { flex: 1; }
-    .eventName { font-weight: 700; font-size: 14px; margin: 0 0 2px; }
-    .eventMeta { font-size: 12px; opacity: 0.7; }
-    .dot { margin: 0 3px; }
-
     .nextActions { margin-top: 14px; text-align: center; }
 
     /* Section grid */
@@ -311,5 +285,32 @@ const squareUrl = "https://kog-hill-winery.square.site/";
       .twoCol { grid-template-columns: 1fr; }
       h1 { font-size: 34px; }
     }
+
+    /* Global styles for dynamically injected event rows */
+    :global(.eventRow) {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    :global(.eventDate) {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 36px;
+      background: var(--wine);
+      color: #fff;
+      border-radius: 8px;
+      padding: 4px 6px;
+      line-height: 1.1;
+    }
+
+    :global(.md) { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
+    :global(.dy) { font-size: 20px; font-weight: 700; }
+
+    :global(.eventInfo) { flex: 1; }
+    :global(.eventName) { font-weight: 700; font-size: 14px; margin: 0 0 2px; }
+    :global(.eventMeta) { font-size: 12px; opacity: 0.7; }
+    :global(.dot) { margin: 0 3px; }
   </style>
 </BaseLayout>
