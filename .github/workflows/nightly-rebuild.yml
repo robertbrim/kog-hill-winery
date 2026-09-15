@@ -2,7 +2,7 @@ name: Weekly Netlify Rebuild
 
 on:
   schedule:
-    - cron: "0 5 * * 0" # Sunday at 5:00 UTC
+    - cron: "0 5 * * 3" # Wednesday at 5:00 UTC
 
 jobs:
   rebuild:
