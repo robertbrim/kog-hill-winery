@@ -1,7 +1,7 @@
 ---
 const {
   title = "Kog Hill Winery",
-  description = "Kog Hill Winery crafts small-batch wines poured at local events across Pennsylvania. Order online and enjoy handcrafted wine delivered to your door.",
+  description = "Kog Hill Winery is opening a tasting room in Hamburg, Pennsylvania. Visit us at 45 S 4th Street, find us at local events, or order online.",
   ogImage = "https://koghillwinery.com/og-image.jpg",
   canonicalUrl = Astro.url.href,
 } = Astro.props;
@@ -40,9 +40,11 @@ const siteUrl = "https://koghillwinery.com";
         "@type": ["Winery", "LocalBusiness"],
         "name": "Kog Hill Winery",
         "url": siteUrl,
-        "description": "Small-batch winery pouring at events across Pennsylvania. Order online.",
+        "description": "Small-batch winery opening a tasting room in Hamburg, Pennsylvania. Find us at local events or order online.",
         "address": {
           "@type": "PostalAddress",
+          "streetAddress": "45 S 4th Street",
+          "addressLocality": "Hamburg",
           "addressRegion": "PA",
           "addressCountry": "US"
         },
@@ -59,7 +61,6 @@ const siteUrl = "https://koghillwinery.com";
         <a href="/">Home</a>
         <a href="/events">Events</a>
         <a href="https://kog-hill-winery.square.site/" target="_blank" rel="noopener noreferrer">Shop Online</a>
-        <a href="/wholesale">Wholesale</a>
         <a href="/about">About</a>
         <a href="/contact">Contact</a>
       </nav>
