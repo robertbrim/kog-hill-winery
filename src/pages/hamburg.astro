@@ -1,0 +1,70 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const directionsUrl = "https://www.google.com/maps/search/?api=1&query=45+S+4th+Street%2C+Hamburg%2C+PA";
+const squareUrl = "https://kog-hill-winery.square.site/";
+---
+
+<BaseLayout
+  title="Kog Hill Winery | Hamburg, Pennsylvania Wine Tastings"
+  description="Kog Hill Winery Hamburg PA offers wine tasting in downtown Hamburg. Visit a winery near Hamburg PA for distinctive Pennsylvania wines, free samples, and bottles to take home."
+  keywords="Kog Hill Winery Hamburg PA, wine tasting Hamburg PA, winery near Hamburg PA, Berks County winery"
+>
+  <main class="landing">
+    <section class="landing-hero">
+      <h1>Kog Hill Winery is now in Hamburg</h1>
+      <p class="landing-lead">Taste distinctive Pennsylvania wines, discover a new favorite, and enjoy free samples at our new downtown tasting room.</p>
+    </section>
+
+    <section class="landing-details">
+      <div class="card">
+        <h2>Visit Kog Hill in Hamburg</h2>
+        <address>45 S 4th Street<br />Hamburg, PA</address>
+        <p class="landing-hours">
+          <strong>Regular hours</strong><br />
+          Monday–Wednesday: Closed<br />
+          Thursday–Friday: 4:00 PM–9:00 PM<br />
+          Saturday: 12:00 PM–9:00 PM<br />
+          Sunday: 12:00 PM–7:00 PM
+        </p>
+        <div class="cta">
+          <a class="button" href={directionsUrl} target="_blank" rel="noopener noreferrer">Get Directions</a>
+          <a class="button button-outline" href={squareUrl} target="_blank" rel="noopener noreferrer">Shop Wine Online</a>
+        </div>
+      </div>
+
+      <aside class="card">
+        <h2>Opening information</h2>
+        <p><strong>Soft Opening:</strong> October 3–4, 2026</p>
+        <p><strong>Grand Opening:</strong> October 10, 2026</p>
+      </aside>
+    </section>
+
+    <section class="card landing-section">
+      <h2>Come Taste With Us</h2>
+      <p>We pour wines made for sharing—from dry and classic to sweet, fruit-forward favorites. Stop in for free samples, find the bottle you love, and take home a little piece of Kog Hill.</p>
+    </section>
+
+    <section class="card landing-section">
+      <h2>Find Your Favorite</h2>
+      <ul class="landing-list">
+        <li>Free wine samples</li>
+        <li>Bottles to take home</li>
+        <li>Sweet, semi-sweet, dry, fruit, and specialty wines</li>
+        <li>Strawberry Lemon Sangria cans</li>
+        <li>Friendly local tasting room in downtown Hamburg</li>
+      </ul>
+    </section>
+
+    <section class="card landing-section">
+      <h2>About Kog Hill</h2>
+      <p>Kog Hill Winery began in 2002 and has always been about crafting memorable wines and welcoming people in. Julie and Bob are bringing that same spirit to Hamburg—one sip at a time.</p>
+    </section>
+
+    <section class="card landing-section">
+      <h2>Current events</h2>
+      <p>Looking for what is happening next? See our upcoming events and plan your visit.</p>
+      <a class="button" href="/events">See upcoming events</a>
+    </section>
+  </main>
+</BaseLayout>
