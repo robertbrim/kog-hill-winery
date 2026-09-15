@@ -1,8 +1,7 @@
-name: Weekly Netlify Rebuild
+name: Manual Netlify Rebuild
 
 on:
-  schedule:
-    - cron: "0 5 * * 3" # Wednesday at 5:00 UTC
+  workflow_dispatch:
 
 jobs:
   rebuild:
